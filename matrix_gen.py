@@ -4,11 +4,23 @@ import turtle
 camera_dist = 300
 screen = turtle.Screen()
 screen.tracer(0)
-turtle.bgcolor("black")
+screen.colormode(255)
+turtle.bgcolor(55,71,79)
 t = turtle.Turtle(visible=False)
 t.speed(0)
-t.pencolor("green")
+t.pencolor("white")
+cube_pos = (0, 0, 0)
 t.pensize(5)
+
+def gettoorigin(coords):
+    return ((0 - (coords[0][0] + coords[7][0]) / 2),
+            (0 - (coords[0][1] + coords[7][1]) / 2),
+            (0 - (coords[0][2] + coords[7][2]) / 2))
+
+def goback(coords):
+    return ((coords[0][0] + coords[7][0]) / 2,
+            (coords[0][1] + coords[7][1]) / 2,
+           (coords[0][2] + coords[7][2]) / 2)
 
 def projcoords(coords):
     projmatrix = [[1, 0, 0, 0],
@@ -28,8 +40,16 @@ def rotateY(coords, rad):
                  [0, np.sin(rad), np.cos(rad), 0],
                  [0, 0, 0, 1]]
     rotated = []
+    gettoorigins = gettoorigin(coords)
+    gobacks = goback(coords)
     for c in coords:
+        c[0] += gettoorigins[0]
+        c[1] += gettoorigins[1]
+        c[2] += gettoorigins[2]
         temp = np.matmul(rotmatrix, c)
+        temp[0] += gobacks[0]
+        temp[1] += gobacks[1]
+        temp[2] += gobacks[2]
         rotated.append(temp)
     return rotated
 
@@ -39,8 +59,16 @@ def rotateX(coords, rad):
                  [np.sin(rad), 0, np.cos(rad), 0],
                  [0, 0, 0, 1]]
     rotated = []
+    gettoorigins = gettoorigin(coords)
+    gobacks = goback(coords)
     for c in coords:
+        c[0] += gettoorigins[0]
+        c[1] += gettoorigins[1]
+        c[2] += gettoorigins[2]
         temp = np.matmul(rotmatrix, c)
+        temp[0] += gobacks[0]
+        temp[1] += gobacks[1]
+        temp[2] += gobacks[2]
         rotated.append(temp)
     return rotated
 
@@ -56,6 +84,25 @@ def translate(coords, dx, dy, dz):
         translated.append(temp)
     return translated
 
+def scale(coords, amnt):
+    sclmatrix = [[amnt, 0, 0, 0],
+                 [0, amnt, 0, 0],
+                 [0, 0, amnt, 0],
+                 [0, 0, 0, amnt]]
+    scaled = []
+    gettoorigins = gettoorigin(coords)
+    gobacks = goback(coords)
+    for c in coords:
+        c[0] += gettoorigins[0]
+        c[1] += gettoorigins[1]
+        c[2] += gettoorigins[2]
+        temp = np.matmul(sclmatrix, c)
+        temp[0] += gobacks[0]
+        temp[1] += gobacks[1]
+        temp[2] += gobacks[2]
+        scaled.append(temp)
+    return scaled
+    
 def make_cube():
     length = 100
     vertices = [
@@ -172,7 +219,19 @@ def rotright():
     animate()  
 
 # ==============================================================================
-    
+
+# ==============================================================================
+# Scaling
+def scaleup():
+    global vertices
+    vertices = scale(vertices, 1.1)
+    animate()
+
+def scaledown():
+    global vertices
+    vertices = scale(vertices, 1/(1.1))
+    animate()
+# ==============================================================================
 screen.onkeypress(up, "Up")
 screen.onkeypress(down, "Down")
 screen.onkeypress(left, "Left")
@@ -184,6 +243,9 @@ screen.onkeypress(rotright, "d")
 screen.onkeypress(rotleft, "a")
 screen.onkeypress(rotup, "w")
 screen.onkeypress(rotdown, "s")
+
+screen.onkeypress(scaleup, "equal")
+screen.onkeypress(scaledown, "minus")
 
 draw_cube(vertices)
 screen.listen()
