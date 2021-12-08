@@ -12,6 +12,10 @@ t.pencolor("white")
 cube_pos = (0, 0, 0)
 t.pensize(5)
 
+rotate_amnt = 0.01
+scale_amnt = 1.01
+translate_amnt = 10
+
 def gettoorigin(coords):
     return ((0 - (coords[0][0] + coords[7][0]) / 2),
             (0 - (coords[0][1] + coords[7][1]) / 2),
@@ -167,32 +171,32 @@ vertices = make_cube()
 # translate
 def up():
     global vertices
-    vertices = translate(vertices, 0, 20, 0)
+    vertices = translate(vertices, 0, translate_amnt, 0)
     animate()
 
 def down():
     global vertices
-    vertices = translate(vertices, 0, -20, 0)
+    vertices = translate(vertices, 0, -translate_amnt, 0)
     animate()
 
 def left():
     global vertices
-    vertices = translate(vertices, -20, 0, 0)
+    vertices = translate(vertices, -translate_amnt, 0, 0)
     animate()
 
 def right():
     global vertices
-    vertices = translate(vertices, 20, 0, 0)
+    vertices = translate(vertices, translate_amnt, 0, 0)
     animate()
 
 def forward():
     global vertices
-    vertices = translate(vertices, 0, 0, 20)
+    vertices = translate(vertices, 0, 0, translate_amnt)
     animate()
     
 def backward():
     global vertices
-    vertices = translate(vertices, 0, 0, -20)
+    vertices = translate(vertices, 0, 0, -translate_amnt)
     animate()
 # ==============================================================================
 
@@ -200,22 +204,22 @@ def backward():
 # Rotations 
 def rotdown():
     global vertices
-    vertices = rotateY(vertices, -0.1)
+    vertices = rotateY(vertices, -rotate_amnt)
     animate()
 
 def rotup():
     global vertices
-    vertices = rotateY(vertices, 0.1)
+    vertices = rotateY(vertices, rotate_amnt)
     animate()   
 
 def rotleft():
     global vertices
-    vertices = rotateX(vertices, -0.1)
+    vertices = rotateX(vertices, -rotate_amnt)
     animate()  
 
 def rotright():
     global vertices
-    vertices = rotateX(vertices, 0.1)
+    vertices = rotateX(vertices, rotate_amnt)
     animate()  
 
 # ==============================================================================
@@ -224,14 +228,15 @@ def rotright():
 # Scaling
 def scaleup():
     global vertices
-    vertices = scale(vertices, 1.1)
+    vertices = scale(vertices, scale_amnt)
     animate()
 
 def scaledown():
     global vertices
-    vertices = scale(vertices, 1/(1.1))
+    vertices = scale(vertices, 1/scale_amnt)
     animate()
 # ==============================================================================
+
 screen.onkeypress(up, "Up")
 screen.onkeypress(down, "Down")
 screen.onkeypress(left, "Left")
