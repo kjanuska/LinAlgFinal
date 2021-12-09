@@ -5,6 +5,7 @@ camera_dist = 300
 screen = turtle.Screen()
 screen.tracer(0)
 screen.colormode(255)
+screen.update()
 turtle.bgcolor(55,71,79)
 t = turtle.Turtle(visible=False)
 t.speed(0)
@@ -12,7 +13,7 @@ t.pencolor("white")
 cube_pos = (0, 0, 0)
 t.pensize(5)
 
-rotate_amnt = 0.01
+rotate_amnt = 0.05
 scale_amnt = 1.01
 translate_amnt = 10
 
@@ -126,10 +127,6 @@ def make_cube():
 def draw_cube(coords):
     coords = projcoords(coords)
     t.penup()
-    # draw the vertices
-    # for c in coords:
-    #     t.goto(c[0], c[1])
-    #     t.dot(20)
     
     # draw the edges in a certain order
     # front square
